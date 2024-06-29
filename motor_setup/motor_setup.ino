@@ -52,7 +52,8 @@ void loop() {
       // Rotate Motor 1 one full revolution in 11.25-degree steps
       for (int j = 0; j < 32; j++) {
         rotateMotor(M1_IN1, M1_IN2, M1_IN3, M1_IN4, 128, currentStepM1);
-        delay(1000); // Delay for each step
+        // picamera function to click picture of specimen
+        delay(1000); // Delay for each step        
       }
     }
     
