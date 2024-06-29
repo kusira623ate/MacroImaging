@@ -10,7 +10,7 @@
 #define M1_IN3 12
 #define M1_IN4 13
 
-// Full-step sequence for 28BYJ-48
+// Full-step sequence for 28BYJ-48 (clockwise)
 const int fullStepSequence[8][4] = {
   {1, 0, 0, 0},  //step 1
   {1, 1, 0, 0},  //step 2
@@ -22,8 +22,8 @@ const int fullStepSequence[8][4] = {
   {1, 0, 0, 1}   //step 8
 };
 
-int currentStepM2 = 0;
-int currentStepM1 = 0;
+int currentStepM2 = 0; //global variable to iterate through fullStepSequence for motor 2
+int currentStepM1 = 0; //global variable to iterate through fullStepSequence for motor 2
 bool start = true;  // Flag to ensure the loop runs only once
 
 void setup() {
@@ -38,33 +38,24 @@ void setup() {
   pinMode(M1_IN2, OUTPUT);
   pinMode(M1_IN3, OUTPUT);
   pinMode(M1_IN4, OUTPUT);
-
-  // Homing sequence to reset motors to a known position
-  // homeMotor(M1_IN1, M1_IN2, M1_IN3, M1_IN4, currentStepM1);
-  // homeMotor(M2_IN1, M2_IN2, M2_IN3, M2_IN4, currentStepM2);
 }
 
 void loop() {
 
   if (start) {
-    // // Rotate Motor 2 anticlockwise by 20 degrees
-    // rotateMotor(M2_IN1, M2_IN2, M2_IN3, M2_IN4, -114, currentStepM2);
-    // delay(1000); // Delay for demonstration purposes
-      
     for (int i = 0; i < 9; i++) {
       if (i > 0) {
         // Rotate Motor 2 clockwise in 5-degree steps until 40 degrees
         rotateMotor(M2_IN1, M2_IN2, M2_IN3, M2_IN4, 56, currentStepM2);
-        delay(1000); // Delay for demonstration purposes }
+        delay(1000); // Delay for demonstration purposes
       }
-
       // Rotate Motor 1 one full revolution in 11.25-degree steps
       for (int j = 0; j < 32; j++) {
         rotateMotor(M1_IN1, M1_IN2, M1_IN3, M1_IN4, 128, currentStepM1);
         delay(1000); // Delay for each step
       }
     }
-  
+    
     // Rotate Motor 2 anticlockwise by 40 degrees to its initial position
     rotateMotor(M2_IN1, M2_IN2, M2_IN3, M2_IN4, -456, currentStepM2);
     delay(1000); // Delay for demonstration purposes
@@ -77,7 +68,7 @@ void loop() {
 
 void rotateMotor(int in1, int in2, int in3, int in4, int steps, int &currentStep) {
   int direction = (steps > 0) ? 1 : -1;
-  steps = abs(steps);
+  steps = abs(steps);  
   
   for (int i = 0; i < steps; i++) {
     currentStep += direction;
@@ -94,15 +85,6 @@ void setStep(int in1, int in2, int in3, int in4, int step) {
   digitalWrite(in3, fullStepSequence[step][2]);
   digitalWrite(in4, fullStepSequence[step][3]);
 }
-
-// void homeMotor(int in1, int in2, int in3, int in4, int &currentStep) {
-//   // Move the motor through a full step cycle to ensure it starts from a known position
-//   for (int i = 0; i < 8; i++) {
-//     setStep(in1, in2, in3, in4, i);
-//     delay(1); // Adjust delay as needed
-//   }
-//   currentStep = 0; // Reset the current step to the initial position
-// }
 
 
 
